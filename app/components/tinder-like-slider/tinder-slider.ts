@@ -1,13 +1,11 @@
 import {Component, Input, Output, EventEmitter, ChangeDetectionStrategy} from "angular2/core";
 import {NgFor} from "angular2/common";
 import {IONIC_DIRECTIVES} from "ionic-angular/index";
-const STYLE_SHEET = require('./tinder-slider.css').toString();
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     directives: [NgFor, IONIC_DIRECTIVES],
     selector: 'pokemon-tinder',
-    styles: [STYLE_SHEET],
     template: `
 <ion-slides [options]="_swiperOptions">
 
@@ -46,7 +44,7 @@ export default class TinderesqueSlider {
     };
 
     private _swiper;
-    
+
     @Input() pokemonList;
     @Output() pokemonCaptured: EventEmitter<{name: string, url: string}> = new EventEmitter();
 

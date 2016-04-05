@@ -34,7 +34,8 @@
       "platform": "ios",
       "version": "",
       "locator": "ios"
-    }
+    },
+    "android"
   ],
   "name": "piknchus",
   "description": "PikNChus: An Ionic project"
