@@ -1,60 +1,13 @@
-import {Component, Input} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ChangeDetectionStrategy} from "angular2/core";
 import {NgFor} from "angular2/common";
 import {IONIC_DIRECTIVES} from "ionic-angular/index";
-
+const STYLE_SHEET = require('./tinder-slider.css').toString();
 
 @Component({
-    selector: 'pokemon-tinder',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     directives: [NgFor, IONIC_DIRECTIVES],
-    styles: [`
-    .swiper-container {
-        width: 100%;
-        padding-top: 50px;
-        padding-bottom: 50px;
-    }
-    .swiper-slide {
-        background-position: center;
-        background-size: cover;
-        width: 300px;
-        height: 300px;
-    }
-    
-    .slide-title {
-        text-transform: uppercase;
-        position: absolute;
-        top: 16px;
-        left: 10px;
-        background-color: rgba(63, 81, 181, 0.9);
-        color: white;
-        font-size: 3.4rem;
-        padding: 3px;
-        box-shadow: #252525 2px 2px 5px;
-    }
-    
-    .pokemon-slide {
-        width: 75vw;
-        margin: 2px;
-        height: 80vh;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    }
-    
-    .swiper-slide-prev {
-        background-blend-mode: luminosity;
-        background-color: black;
-    }
-    
-    .button-fab {
-        width: 66px;
-        height: 66px;
-    }
-    
-    .pokeball-fab {
-        padding: 0;
-        height: 66px;
-        width: 66px;
-    }
-    
-`],
+    selector: 'pokemon-tinder',
+    styles: [STYLE_SHEET],
     template: `
 <ion-slides [options]="_swiperOptions">
 
@@ -65,7 +18,7 @@ import {IONIC_DIRECTIVES} from "ionic-angular/index";
 >
 <h1 class="slide-title">{{pokemon.name}}</h1>
 
-  <button fab fab-right fab-bottom class="pokeball-fab">
+  <button fab fab-right fab-bottom class="pokeball-fab" (click)="catchPokemon(pokemon)">
     <img src="../../assets/Pokeball.png" />
   </button>
 
@@ -75,13 +28,14 @@ import {IONIC_DIRECTIVES} from "ionic-angular/index";
 `
 })
 export default class TinderesqueSlider {
-    
+
     private _swiperOptions = {
         effect: 'coverflow',
         grabCursor: true,
         centeredSlides: true,
         slidesPerView: 'auto',
         allowSwipeToPrev: false,
+        onInit: this.setSwiperTo(this),
         coverflow: {
             rotate: 50,
             stretch: 0,
@@ -90,8 +44,20 @@ export default class TinderesqueSlider {
             slideShadows: false
         }
     };
+
+    private _swiper;
     
     @Input() pokemonList;
+    @Output() pokemonCaptured: EventEmitter<{name: string, url: string}> = new EventEmitter();
+
+    setSwiperTo(setTo){
+        return (swiperInstance) => setTo._swiper = swiperInstance;
+    }
+
+    catchPokemon(pokemon){
+        this.pokemonCaptured.emit(pokemon);
+        this._swiper.slideNext();
+    }
 
     imageGrabber(pokemonName: string) {
         return `url(http://img.pokemondb.net/artwork/${pokemonName}.jpg)`;
