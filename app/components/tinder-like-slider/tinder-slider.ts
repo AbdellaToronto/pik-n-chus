@@ -17,7 +17,7 @@ import {IONIC_DIRECTIVES} from "ionic-angular/index";
 <h1 class="slide-title">{{pokemon.name}}</h1>
 
   <button fab fab-right fab-bottom class="pokeball-fab" (click)="catchPokemon(pokemon)">
-    <img src="../../assets/Pokeball.png" />
+    <img src="https://upload.wikimedia.org/wikipedia/en/3/39/Pokeball.PNG" />
   </button>
 
 </ion-slide>
